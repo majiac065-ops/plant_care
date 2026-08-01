@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database
+*.sqlite3
+db.sqlite3
+
+# Environment & Local Configuration
+.env
+.venv/
+venv/
+ENV/
+plantcare_env/
+
+# OS / IDE generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+
+# Django Media Uploads (keep directory structure)
+media/plant_uploads/*
+!media/plant_uploads/.gitkeep
