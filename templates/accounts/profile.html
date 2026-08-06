@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile - PlantCare{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <!-- Profile Sidebar -->
+  <div class="col-md-4">
+    <div class="card card-plantcare text-center p-4">
+      <div class="mb-3">
+        {% if user.profile.profile_picture %}
+          <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle img-thumbnail shadow-sm" style="width: 130px; height: 130px; object-fit: cover;" alt="Profile Picture">
+        {% else %}
+          <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 130px; height: 130px; font-size: 3rem;">
+            <i class="bi bi-person"></i>
+          </div>
+        {% endif %}
+      </div>
+      <h4 class="fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h4>
+      <p class="text-muted mb-2">@{{ user.username }}</p>
+      <span class="badge bg-success mb-3"><i class="bi bi-geo-alt-fill me-1"></i> {{ user.profile.location_zone }}</span>
+      <p class="text-secondary small fst-italic">{{ user.profile.bio|default:"No bio added yet." }}</p>
+      <div class="border-top pt-3 text-muted small">
+        <div><i class="bi bi-envelope me-1"></i> {{ user.email }}</div>
+        <div><i class="bi bi-telephone me-1"></i> {{ user.profile.phone_number|default:"Not provided" }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Edit Form -->
+  <div class="col-md-8">
+    <div class="card card-plantcare">
+      <div class="card-header card-header-green">
+        <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i> Edit Account & Gardening Profile</h5>
+      </div>
+      <div class="card-body p-4">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <h6 class="text-success fw-bold border-bottom pb-2 mb-3">Account Information</h6>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold">First Name</label>
+              {{ u_form.first_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold">Last Name</label>
+              {{ u_form.last_name }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Email Address</label>
+            {{ u_form.email }}
+          </div>
+
+          <h6 class="text-success fw-bold border-bottom pb-2 mb-3 mt-4">Plant Care Preferences</h6>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold">Phone Number</label>
+              {{ p_form.phone_number }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold">Gardening Zone / Setting</label>
+              {{ p_form.location_zone }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label font-weight-bold">Gardener Bio</label>
+            {{ p_form.bio }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label font-weight-bold">Profile Picture</label>
+            {{ p_form.profile_picture }}
+          </div>
+          
+          <button type="submit" class="btn btn-green px-4">
+            <i class="bi bi-save me-1"></i> Save Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
