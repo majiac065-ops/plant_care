@@ -1,0 +1,181 @@
+/* PlantCare Green-Themed UI Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-dark: #1b4332;
+  --primary-green: #2d6a4f;
+  --accent-green: #40916c;
+  --light-green: #52b788;
+  --soft-mint: #d8f3dc;
+  --bg-sage: #f4f9f4;
+  --text-main: #2b2d42;
+  --text-muted: #6c757d;
+  --card-border: rgba(82, 183, 136, 0.25);
+  --shadow-sm: 0 4px 12px rgba(45, 106, 79, 0.08);
+  --shadow-hover: 0 10px 25px rgba(45, 106, 79, 0.16);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-sage);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Navbar */
+.navbar-plantcare {
+  background-color: var(--primary-dark);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  padding: 0.8rem 1rem;
+}
+
+.navbar-plantcare .navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-plantcare .navbar-brand i {
+  color: var(--light-green);
+}
+
+.navbar-plantcare .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-plantcare .nav-link:hover,
+.navbar-plantcare .nav-link.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Glassmorphism & Custom Cards */
+.card-plantcare {
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+.card-plantcare:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-header-green {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-green));
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: none;
+  padding: 1.1rem 1.5rem;
+}
+
+/* Hero Section */
+.hero-banner {
+  background: linear-gradient(135deg, rgba(27, 67, 50, 0.95), rgba(45, 106, 79, 0.88)),
+              url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+  color: white;
+  padding: 5rem 1.5rem;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(27, 67, 50, 0.2);
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* Buttons */
+.btn-green {
+  background-color: var(--primary-green);
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-green:hover {
+  background-color: var(--primary-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-outline-green {
+  border: 2px solid var(--primary-green);
+  color: var(--primary-green);
+  font-weight: 600;
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-green:hover {
+  background-color: var(--primary-green);
+  color: #ffffff;
+}
+
+/* Badges & Tags */
+.badge-confidence {
+  background-color: var(--soft-mint);
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid var(--light-green);
+}
+
+.badge-care-info {
+  background-color: rgba(45, 106, 79, 0.1);
+  color: var(--primary-green);
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+/* Upload Dropzone Preview */
+.upload-dropzone {
+  border: 2px dashed var(--accent-green);
+  border-radius: 16px;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background-color: rgba(216, 243, 220, 0.25);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.upload-dropzone:hover {
+  background-color: rgba(216, 243, 220, 0.5);
+}
+
+.upload-icon {
+  font-size: 3.5rem;
+  color: var(--accent-green);
+}
+
+/* Footer */
+.footer-plantcare {
+  background-color: var(--primary-dark);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 1.8rem 0;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
