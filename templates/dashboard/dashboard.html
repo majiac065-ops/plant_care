@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}My Garden Dashboard - PlantCare{% endblock %}
+
+{% block content %}
+<!-- Top Header & Search Bar -->
+<div class="row align-items-center mb-4">
+  <div class="col-md-6 mb-3 mb-md-0">
+    <h2 class="fw-bold text-success mb-1"><i class="bi bi-flower3 me-2"></i> My Garden Dashboard</h2>
+    <p class="text-muted mb-0">Welcome back, <strong>{{ user.username }}</strong>! You have {{ total_plants }} plant{{ total_plants|pluralize }} saved.</p>
+  </div>
+  <div class="col-md-6">
+    <form method="GET" action="{% url 'dashboard' %}" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ query }}" class="form-control rounded-pill shadow-sm" placeholder="Search saved plants by name or notes...">
+      <button type="submit" class="btn btn-green rounded-pill px-3">
+        <i class="bi bi-search"></i>
+      </button>
+      <a href="{% url 'add_plant' %}" class="btn btn-outline-green rounded-pill text-nowrap">
+        <i class="bi bi-plus-lg me-1"></i> Add Plant
+      </a>
+    </form>
+  </div>
+</div>
+
+<!-- Saved Plants Grid -->
+{% if plants %}
+  <div class="row g-4 mb-5">
+    {% for plant in plants %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card card-plantcare h-100">
+          {% if plant.plant_image %}
+            <img src="{{ plant.plant_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ plant.plant_name }}">
+          {% else %}
+            <div class="bg-light text-center py-5 border-bottom">
+              <i class="bi bi-tree text-success" style="font-size: 4rem;"></i>
+            </div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-success mb-1">{{ plant.plant_name }}</h5>
+            <p class="card-subtitle text-muted fst-italic mb-3 small">{{ plant.scientific_name|default:"Botanical name unknown" }}</p>
+
+            <div class="small mb-3">
+              <div class="mb-1"><i class="bi bi-droplet-fill text-primary me-2"></i> <strong>Watering:</strong> {{ plant.watering_frequency|truncatechars:45|default:"Regular" }}</div>
+              <div class="mb-1"><i class="bi bi-sun-fill text-warning me-2"></i> <strong>Sunlight:</strong> {{ plant.sunlight_requirement|truncatechars:45|default:"Bright indirect" }}</div>
+            </div>
+
+            {% if plant.confidence_score %}
+              <span class="badge badge-confidence mb-3 d-inline-block"><i class="bi bi-cpu me-1"></i> {{ plant.confidence_score }}% ML Match</span>
+            {% endif %}
+          </div>
+          <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center pt-0 pb-3 px-3">
+            <a href="{% url 'plant_detail' plant.id %}" class="btn btn-sm btn-outline-green rounded-pill">
+              <i class="bi bi-eye-fill me-1"></i> View Details
+            </a>
+            <div class="btn-group">
+              <a href="{% url 'edit_plant' plant.id %}" class="btn btn-sm btn-outline-secondary" title="Edit">
+                <i class="bi bi-pencil-fill"></i>
+              </a>
+              <a href="{% url 'delete_plant' plant.id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                <i class="bi bi-trash-fill"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card card-plantcare text-center p-5 mb-5">
+    <div class="mb-3 text-success fs-1">
+      <i class="bi bi-journal-plus"></i>
+    </div>
+    <h4 class="fw-bold mb-2">No Saved Plants Found</h4>
+    <p class="text-muted col-md-6 mx-auto mb-4">
+      {% if query %}
+        No plants matching "{{ query }}" were found in your collection.
+      {% else %}
+        Your garden dashboard is empty. Identify a plant or manually add plants to build your personal care catalog!
+      {% endif %}
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'identify_plant' %}" class="btn btn-green rounded-pill px-4">
+        <i class="bi bi-camera-fill me-1"></i> Identify Plant
+      </a>
+      <a href="{% url 'add_plant' %}" class="btn btn-outline-green rounded-pill px-4">
+        <i class="bi bi-plus-circle me-1"></i> Add New Plant
+      </a>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

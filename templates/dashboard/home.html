@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}PlantCare: A Smart Plant Care System{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<div class="hero-banner text-center mb-5">
+  <div class="col-lg-8 mx-auto">
+    <span class="badge bg-light text-success font-weight-bold mb-3 px-3 py-2 fs-6 rounded-pill"><i class="bi bi-stars me-1"></i> MCA Mini Project</span>
+    <h1 class="hero-title mb-3">PlantCare: Smart Plant Care System</h1>
+    <p class="lead mb-4 opacity-90">
+      Identify plant species from leaf photos, retrieve intelligent care guidelines, and track your garden collection in a responsive green dashboard.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="{% url 'identify_plant' %}" class="btn btn-light btn-lg px-4 font-weight-bold text-success rounded-pill shadow">
+        <i class="bi bi-camera-fill me-2"></i> Identify Plant Now
+      </a>
+      <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg px-4 rounded-pill">
+        <i class="bi bi-person-plus-fill me-2"></i> Create Free Account
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<div class="row g-4 mb-5">
+  <div class="col-md-3">
+    <div class="card card-plantcare text-center p-4 h-100">
+      <div class="fs-1 text-success mb-3"><i class="bi bi-person-bounding-box"></i></div>
+      <h5 class="fw-bold mb-2">User Module</h5>
+      <p class="text-muted small mb-0">Secure registration, personalized gardener profile, and zone preferences.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-plantcare text-center p-4 h-100">
+      <div class="fs-1 text-success mb-3"><i class="bi bi-cpu-fill"></i></div>
+      <h5 class="fw-bold mb-2">ML Identification</h5>
+      <p class="text-muted small mb-0">Upload leaf photos to analyze species and calculate prediction confidence.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-plantcare text-center p-4 h-100">
+      <div class="fs-1 text-success mb-3"><i class="bi bi-droplet-half"></i></div>
+      <h5 class="fw-bold mb-2">Plant Care Module</h5>
+      <p class="text-muted small mb-0">Retrieve tailored watering, sunlight, soil, and fertilizer guides.</p>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-plantcare text-center p-4 h-100">
+      <div class="fs-1 text-success mb-3"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+      <h5 class="fw-bold mb-2">Dashboard Module</h5>
+      <p class="text-muted small mb-0">Organize, view, edit, and manage your saved garden plant collection.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

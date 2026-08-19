@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ plant.plant_name }} Details - PlantCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+  <div class="col-lg-10">
+    <div class="mb-3">
+      <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
+        <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+      </a>
+    </div>
+
+    <div class="card card-plantcare">
+      <div class="card-header card-header-green d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0 fw-bold">{{ plant.plant_name }}</h3>
+          <small class="text-white-50 fst-italic">{{ plant.scientific_name|default:"Botanical name unspecified" }}</small>
+        </div>
+        <div class="btn-group">
+          <a href="{% url 'edit_plant' plant.id %}" class="btn btn-light btn-sm text-dark font-weight-bold">
+            <i class="bi bi-pencil-fill me-1"></i> Edit
+          </a>
+          <a href="{% url 'delete_plant' plant.id %}" class="btn btn-danger btn-sm">
+            <i class="bi bi-trash-fill me-1"></i> Delete
+          </a>
+        </div>
+      </div>
+      <div class="card-body p-4">
+        <div class="row">
+          <div class="col-md-5 mb-4 mb-md-0 text-center">
+            {% if plant.plant_image %}
+              <img src="{{ plant.plant_image.url }}" class="img-fluid rounded-4 shadow" style="max-height: 350px; width: 100%; object-fit: cover;" alt="{{ plant.plant_name }}">
+            {% else %}
+              <div class="bg-light rounded-4 text-center py-5 border">
+                <i class="bi bi-tree text-success" style="font-size: 5rem;"></i>
+                <p class="text-muted small mt-2">No custom photo uploaded</p>
+              </div>
+            {% endif %}
+
+            {% if plant.confidence_score %}
+              <div class="mt-3">
+                <span class="badge badge-confidence"><i class="bi bi-cpu me-1"></i> {{ plant.confidence_score }}% Confidence Match</span>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-7">
+            <h5 class="fw-bold text-success border-bottom pb-2 mb-3">Care Specifications</h5>
+            
+            <div class="mb-3">
+              <h6 class="fw-bold text-primary mb-1"><i class="bi bi-droplet-fill me-2"></i> Watering Schedule</h6>
+              <p class="text-secondary bg-light p-3 rounded-3 mb-0">{{ plant.watering_frequency|default:"No specific watering details added." }}</p>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-bold text-warning mb-1"><i class="bi bi-sun-fill me-2"></i> Sunlight & Light</h6>
+              <p class="text-secondary bg-light p-3 rounded-3 mb-0">{{ plant.sunlight_requirement|default:"No specific lighting details added." }}</p>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-bold text-success mb-1"><i class="bi bi-layers-fill me-2"></i> Soil Recommendation</h6>
+              <p class="text-secondary bg-light p-3 rounded-3 mb-0">{{ plant.soil_type|default:"No specific soil mix details added." }}</p>
+            </div>
+
+            <div class="mb-3">
+              <h6 class="fw-bold text-info mb-1"><i class="bi bi-magic me-2"></i> Fertilizer Info</h6>
+              <p class="text-secondary bg-light p-3 rounded-3 mb-0">{{ plant.fertilizer_info|default:"No specific fertilizer details added." }}</p>
+            </div>
+
+            {% if plant.notes %}
+              <div class="mb-3">
+                <h6 class="fw-bold text-dark mb-1"><i class="bi bi-journal-text me-2"></i> Gardener Notes</h6>
+                <p class="text-secondary bg-light p-3 rounded-3 mb-0">{{ plant.notes }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="card-footer bg-light text-muted small d-flex justify-content-between">
+        <span><i class="bi bi-calendar-check me-1"></i> Added on: {{ plant.created_at|date:"F d, Y" }}</span>
+        <span><i class="bi bi-clock-history me-1"></i> Last updated: {{ plant.updated_at|date:"F d, Y H:i" }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
