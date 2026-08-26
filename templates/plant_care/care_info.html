@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Plant Care Guide - {{ care_data.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-8 mx-auto">
+    <form method="GET" action="{% url 'care_info' %}" class="d-flex gap-2">
+      <input type="text" name="q" value="{{ query }}" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Search plant care guide (e.g. Monstera, Snake Plant, Peace Lily)...">
+      <button type="submit" class="btn btn-green rounded-pill px-4">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="card card-plantcare">
+      <div class="card-header card-header-green d-flex justify-content-between align-items-center">
+        <div>
+          <h3 class="mb-0 fw-bold"><i class="bi bi-flower1 me-2"></i> {{ care_data.name }}</h3>
+          <small class="text-white-50 fst-italic">{{ care_data.scientific_name }} &bull; {{ care_data.category }}</small>
+        </div>
+        {% if user.is_authenticated %}
+          <form method="POST" action="{% url 'save_plant_from_care' %}">
+            {% csrf_token %}
+            <input type="hidden" name="plant_name" value="{{ care_data.name }}">
+            <input type="hidden" name="scientific_name" value="{{ care_data.scientific_name }}">
+            <input type="hidden" name="watering" value="{{ care_data.watering }}">
+            <input type="hidden" name="sunlight" value="{{ care_data.sunlight }}">
+            <input type="hidden" name="soil" value="{{ care_data.soil }}">
+            <input type="hidden" name="fertilizer" value="{{ care_data.fertilizer }}">
+            <button type="submit" class="btn btn-light btn-sm rounded-pill font-weight-bold text-success">
+              <i class="bi bi-bookmark-plus-fill me-1"></i> Save to Dashboard
+            </button>
+          </form>
+        {% endif %}
+      </div>
+      <div class="card-body p-4">
+        <div class="row g-4">
+          <!-- Watering -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-primary">
+              <h5 class="fw-bold text-primary mb-2"><i class="bi bi-droplet-fill me-2"></i> Watering Requirements</h5>
+              <p class="mb-0 text-secondary">{{ care_data.watering }}</p>
+            </div>
+          </div>
+
+          <!-- Sunlight -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-warning">
+              <h5 class="fw-bold text-warning mb-2"><i class="bi bi-sun-fill me-2"></i> Sunlight & Lighting</h5>
+              <p class="mb-0 text-secondary">{{ care_data.sunlight }}</p>
+            </div>
+          </div>
+
+          <!-- Soil -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-success">
+              <h5 class="fw-bold text-success mb-2"><i class="bi bi-layers-fill me-2"></i> Soil & Substrate</h5>
+              <p class="mb-0 text-secondary">{{ care_data.soil }}</p>
+            </div>
+          </div>
+
+          <!-- Fertilizer -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-info">
+              <h5 class="fw-bold text-info mb-2"><i class="bi bi-magic me-2"></i> Fertilizer Schedule</h5>
+              <p class="mb-0 text-secondary">{{ care_data.fertilizer }}</p>
+            </div>
+          </div>
+
+          <!-- Temperature & Toxicity -->
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-secondary">
+              <h5 class="fw-bold text-dark mb-2"><i class="bi bi-thermometer-half me-2"></i> Temperature & Humidity</h5>
+              <p class="mb-1 text-secondary"><strong>Temp:</strong> {{ care_data.temperature }}</p>
+              <p class="mb-0 text-secondary"><strong>Humidity:</strong> {{ care_data.humidity }}</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 h-100 border-start border-4 border-danger">
+              <h5 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i> Toxicity & Pet Safety</h5>
+              <p class="mb-0 text-secondary">{{ care_data.toxicity }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
