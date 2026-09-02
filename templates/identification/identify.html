@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Identify Plant - PlantCare{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+  <div class="col-lg-8">
+    <div class="card card-plantcare mb-4">
+      <div class="card-header card-header-green text-center">
+        <h4 class="mb-0"><i class="bi bi-camera-fill me-2"></i> Machine Learning Plant & Leaf Identification</h4>
+      </div>
+      <div class="card-body p-4 text-center">
+        <p class="text-muted mb-4">
+          Upload a clear photograph of your plant or leaf. Our computer vision model will process the visual pattern and return identified plant details along with confidence score.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="upload-dropzone mb-4" onclick="document.getElementById('plantImageInput').click();">
+            <i class="bi bi-cloud-arrow-up-fill upload-icon"></i>
+            <h5 class="mt-3 fw-bold text-success">Click or Drop Plant Image Here</h5>
+            <p class="text-muted small mb-0">Supports JPG, PNG, WEBP high-resolution photos</p>
+            <div class="mt-3 col-md-8 mx-auto">
+              {{ form.uploaded_image }}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-green btn-lg px-5">
+            <i class="bi bi-cpu-fill me-2"></i> Process & Identify Plant
+          </button>
+        </form>
+      </div>
+    </div>
+
+    {% if history %}
+      <div class="card card-plantcare">
+        <div class="card-header bg-light text-dark fw-bold">
+          <i class="bi bi-clock-history me-2 text-success"></i> Your Recent Identifications
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for item in history %}
+            <li class="list-group-item d-flex align-items-center justify-content-between py-3">
+              <div class="d-flex align-items-center gap-3">
+                <img src="{{ item.uploaded_image.url }}" class="rounded shadow-sm" style="width: 55px; height: 55px; object-fit: cover;" alt="Leaf Upload">
+                <div>
+                  <h6 class="mb-0 fw-bold">{{ item.identified_name }}</h6>
+                  <small class="text-muted fst-italic">{{ item.scientific_name }} &bull; {{ item.identified_at|date:"M d, Y" }}</small>
+                </div>
+              </div>
+              <div>
+                <span class="badge badge-confidence me-2">{{ item.confidence_score }}% Match</span>
+                <a href="{% url 'identification_result' item.id %}" class="btn btn-sm btn-outline-green">View Result</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
