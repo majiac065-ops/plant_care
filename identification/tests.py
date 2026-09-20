@@ -56,3 +56,41 @@ class PlantIdentificationTests(TestCase):
         self.assertEqual(record.confidence_score, 0.0)
         self.assertEqual(record.identified_name, 'Mystery Plant')
 
+    def test_broad_leaf_not_misclassified_as_aloe_vera(self):
+        """Verify that broad-leaf plant images are correctly classified as broad-leaf species and not Aloe Vera."""
+        import tempfile
+        from identification.ml_engine import PlantMLEngine
+
+        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=True) as tmp:
+            # Create a rich tropical broad-leaf image (Forest Green RGB: 34, 139, 34)
+            img = Image.new('RGB', size=(300, 300), color=(34, 139, 34))
+            img.save(tmp.name, format='JPEG')
+
+            result = PlantMLEngine.identify_plant(tmp.name)
+
+            self.assertIsNotNone(result)
+            self.assertNotEqual(result['id'], 'aloe_vera', "Broad-leaf image should not be misclassified as Aloe Vera.")
+            self.assertEqual(result.get('leaf_type'), 'broad_leaf')
+            self.assertIn('green_ratio', result.get('feature_metrics', {}))
+            self.assertGreater(result['feature_metrics']['green_ratio'], 0.5)
+
+    def test_feature_extraction_accuracy(self):
+        """Test feature extraction output keys (green_ratio, hue_hist, brightness, aspect_ratio)."""
+        import tempfile
+        import numpy as np
+        from identification.ml_engine import PlantMLEngine
+
+        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=True) as tmp:
+            img = Image.new('RGB', size=(400, 200), color=(0, 160, 50))
+            img.save(tmp.name, format='JPEG')
+
+            specs, rgb_np, hsv_np = PlantMLEngine.preprocess_image(tmp.name)
+            features = PlantMLEngine.extract_features(rgb_np, hsv_np, specs=specs)
+
+            self.assertIn('green_ratio', features)
+            self.assertIn('hue_hist', features)
+            self.assertIn('brightness', features)
+            self.assertEqual(len(features['hue_hist']), 8)
+            self.assertEqual(features['aspect_ratio'], 2.0)
+
+

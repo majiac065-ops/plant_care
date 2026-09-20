@@ -5,51 +5,66 @@
 {% block content %}
 <div class="row justify-content-center py-3">
   <div class="col-lg-8">
-    <div class="card card-plantcare mb-4">
-      <div class="card-header card-header-green text-center">
-        <h4 class="mb-0"><i class="bi bi-camera-fill me-2"></i> Machine Learning Plant & Leaf Identification</h4>
+    <div class="card card-plantcare mb-4 border-0 shadow-sm">
+      <div class="card-header card-header-green text-center py-3">
+        <h4 class="mb-0 fw-bold"><i class="bi bi-cpu-fill me-2"></i> ML Leaf & Plant Identification Engine</h4>
       </div>
       <div class="card-body p-4 text-center">
         <p class="text-muted mb-4">
-          Upload a clear photograph of your plant or leaf. Our computer vision model will process the visual pattern and return identified plant details along with confidence score.
+          Upload a clear photo of any plant leaf or foliage. Our computer vision model extracts visual feature vectors (HSV saturation, edge venation, foliage density) to classify species and generate custom care guides.
         </p>
 
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id="plantUploadForm">
           {% csrf_token %}
-          <div class="upload-dropzone mb-4" onclick="document.getElementById('plantImageInput').click();">
-            <i class="bi bi-cloud-arrow-up-fill upload-icon"></i>
-            <h5 class="mt-3 fw-bold text-success">Click or Drop Plant Image Here</h5>
-            <p class="text-muted small mb-0">Supports JPG, PNG, WEBP high-resolution photos</p>
-            <div class="mt-3 col-md-8 mx-auto">
+          <div class="upload-dropzone mb-4 p-4 border border-2 border-dashed rounded-4 bg-light cursor-pointer" id="dropzone">
+            <div id="uploadPlaceholder">
+              <i class="bi bi-cloud-arrow-up-fill text-success display-4"></i>
+              <h5 class="mt-3 fw-bold text-success">Click or Drag Plant Photo Here</h5>
+              <p class="text-muted small mb-2">Supports JPG, PNG, WEBP high-resolution photos</p>
+              <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-4 mt-2" id="browseBtn">
+                <i class="bi bi-folder2-open me-1"></i> Choose File
+              </button>
+            </div>
+            
+            <div id="imagePreviewContainer" class="d-none mt-2">
+              <img id="imagePreview" src="#" alt="Leaf Preview" class="img-thumbnail shadow-sm rounded-3 mb-2" style="max-height: 220px; object-fit: cover;">
+              <p class="text-success small fw-semibold mb-2" id="selectedFileName"></p>
+              <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="changeFileBtn">
+                <i class="bi bi-arrow-repeat me-1"></i> Change Photo
+              </button>
+            </div>
+
+            <div class="d-none">
               {{ form.uploaded_image }}
             </div>
           </div>
 
-          <button type="submit" class="btn btn-green btn-lg px-5">
-            <i class="bi bi-cpu-fill me-2"></i> Process & Identify Plant
+          <button type="submit" id="submitBtn" class="btn btn-green btn-lg px-5 shadow-sm">
+            <i class="bi bi-search me-2"></i> Analyze & Identify Plant
           </button>
         </form>
       </div>
     </div>
 
     {% if history %}
-      <div class="card card-plantcare">
-        <div class="card-header bg-light text-dark fw-bold">
-          <i class="bi bi-clock-history me-2 text-success"></i> Your Recent Identifications
+      <div class="card card-plantcare border-0 shadow-sm">
+        <div class="card-header bg-white text-dark fw-bold border-bottom py-3 d-flex align-items-center justify-content-between">
+          <span><i class="bi bi-clock-history me-2 text-success"></i> Recent Identification History</span>
+          <span class="badge bg-secondary rounded-pill">{{ history|length }}</span>
         </div>
         <ul class="list-group list-group-flush">
           {% for item in history %}
             <li class="list-group-item d-flex align-items-center justify-content-between py-3">
               <div class="d-flex align-items-center gap-3">
-                <img src="{{ item.uploaded_image.url }}" class="rounded shadow-sm" style="width: 55px; height: 55px; object-fit: cover;" alt="Leaf Upload">
+                <img src="{{ item.uploaded_image.url }}" class="rounded-3 shadow-sm" style="width: 55px; height: 55px; object-fit: cover;" alt="Leaf Upload">
                 <div>
-                  <h6 class="mb-0 fw-bold">{{ item.identified_name }}</h6>
+                  <h6 class="mb-0 fw-bold text-success">{{ item.identified_name }}</h6>
                   <small class="text-muted fst-italic">{{ item.scientific_name }} &bull; {{ item.identified_at|date:"M d, Y" }}</small>
                 </div>
               </div>
               <div>
-                <span class="badge badge-confidence me-2">{{ item.confidence_score }}% Match</span>
-                <a href="{% url 'identification_result' item.id %}" class="btn btn-sm btn-outline-green">View Result</a>
+                <span class="badge badge-confidence me-2 bg-success text-white px-3 py-2 rounded-pill">{{ item.confidence_score }}% Match</span>
+                <a href="{% url 'identification_result' item.id %}" class="btn btn-sm btn-outline-green rounded-pill">View Details</a>
               </div>
             </li>
           {% endfor %}
@@ -60,3 +75,114 @@
   </div>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('plantImageInput');
+  const browseBtn = document.getElementById('browseBtn');
+  const changeFileBtn = document.getElementById('changeFileBtn');
+  const previewContainer = document.getElementById('imagePreviewContainer');
+  const previewImage = document.getElementById('imagePreview');
+  const placeholder = document.getElementById('uploadPlaceholder');
+  const fileNameText = document.getElementById('selectedFileName');
+  const uploadForm = document.getElementById('plantUploadForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (!fileInput || !dropzone) return;
+
+  // Prevent event recursion when clicking directly on the file input element
+  fileInput.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Clicking anywhere inside the dropzone triggers the file input dialog
+  dropzone.addEventListener('click', function(e) {
+    if (e.target !== fileInput) {
+      fileInput.click();
+    }
+  });
+
+  if (browseBtn) {
+    browseBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fileInput.click();
+    });
+  }
+
+  if (changeFileBtn) {
+    changeFileBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fileInput.click();
+    });
+  }
+
+  function handleFiles(files) {
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          const sizeKb = (file.size / 1024).toFixed(1);
+          fileNameText.textContent = "Selected File: " + file.name + " (" + sizeKb + " KB)";
+          placeholder.classList.add('d-none');
+          previewContainer.classList.remove('d-none');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  fileInput.addEventListener('change', function(e) {
+    handleFiles(e.target.files);
+  });
+
+  // Drag and Drop handling
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, function() {
+      dropzone.classList.add('border-success', 'shadow-sm');
+      dropzone.style.backgroundColor = 'rgba(216, 243, 220, 0.6)';
+    }, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, function() {
+      dropzone.classList.remove('border-success', 'shadow-sm');
+      dropzone.style.backgroundColor = '';
+    }, false);
+  });
+
+  dropzone.addEventListener('drop', function(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files && files.length > 0) {
+      fileInput.files = files;
+      handleFiles(files);
+    }
+  }, false);
+
+  if (uploadForm) {
+    uploadForm.addEventListener('submit', function(e) {
+      if (!fileInput.files || fileInput.files.length === 0) {
+        e.preventDefault();
+        alert('Please select an image file to upload.');
+        return;
+      }
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Running ML Inference Engine...';
+    });
+  }
+});
+</script>
+{% endblock %}
+
+

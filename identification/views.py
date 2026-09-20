@@ -17,13 +17,13 @@ def identify_plant_view(request):
                 record.confidence_score = 0.0
             record.save()
 
-            # Execute Image Processing & ML Classification engine
+            # Execute Image Preprocessing & ML Classification engine
             try:
                 result = PlantMLEngine.identify_plant(record.uploaded_image.path)
             except Exception:
                 result = {}
 
-            # Update history model record with ML prediction
+            # Update history model record with ML prediction output
             record.identified_name = result.get('name', 'Unknown Plant')
             record.scientific_name = result.get('scientific_name', '')
 
@@ -40,10 +40,10 @@ def identify_plant_view(request):
             record.care_summary = result.get('care_summary', '')
             record.save()
 
-            messages.success(request, f"Plant identified with {record.confidence_score}% confidence!")
+            messages.success(request, f"Plant identified as '{record.identified_name}' with {record.confidence_score}% confidence!")
             return redirect('identification_result', record_id=record.id)
         else:
-            messages.error(request, "Please upload a valid image file.")
+            messages.error(request, "Please select a valid plant or leaf image file to upload.")
     else:
         form = PlantUploadForm()
 
@@ -59,8 +59,31 @@ def identify_plant_view(request):
 
 def identification_result_view(request, record_id):
     record = get_object_or_404(PlantIdentificationHistory, id=record_id)
+    
+    # Match record with ML Engine metadata dictionary if available
+    matched_meta = {}
+    for plant in PlantMLEngine.KNOWN_PLANTS:
+        if plant['name'] == record.identified_name or plant['scientific_name'] == record.scientific_name:
+            matched_meta = plant
+            break
+
+    # Determine confidence badge styling
+    if record.confidence_score >= 90:
+        badge_style = 'bg-success'
+        confidence_level = 'High Confidence Match'
+    elif record.confidence_score >= 75:
+        badge_style = 'bg-warning text-dark'
+        confidence_level = 'Moderate Confidence Match'
+    else:
+        badge_style = 'bg-info text-dark'
+        confidence_level = 'Possible Match'
+
     context = {
         'record': record,
+        'matched_meta': matched_meta,
+        'badge_style': badge_style,
+        'confidence_level': confidence_level,
         'title': f'Result: {record.identified_name} - PlantCare'
     }
     return render(request, 'identification/result.html', context)
+
