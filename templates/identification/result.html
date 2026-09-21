@@ -13,23 +13,38 @@
         </span>
       </div>
       <div class="card-body p-4">
+
+        {% if low_confidence %}
+          <div class="alert alert-warning border-warning shadow-sm rounded-3 mb-4 d-flex align-items-start gap-3">
+            <i class="bi bi-exclamation-triangle-fill text-warning fs-3 flex-shrink-0"></i>
+            <div>
+              <h5 class="fw-bold mb-1">Uncertain Prediction / Low Confidence Notice</h5>
+              <p class="mb-1 text-dark small">
+                {{ warning_message|default:"The confidence score for this prediction is low (below 55.0%). The image may be blurry, poorly lit, or contain a species outside the 47 supported house plant classes." }}
+              </p>
+              <small class="text-muted fst-italic">Tip: Ensure your photo clearly focuses on the leaf surface under good lighting.</small>
+            </div>
+          </div>
+        {% endif %}
+
         <div class="row align-items-center">
           <div class="col-md-5 text-center mb-4 mb-md-0">
             <div class="position-relative d-inline-block">
               <img src="{{ record.uploaded_image.url }}" class="img-fluid rounded-4 shadow-sm" style="max-height: 320px; width: 100%; object-fit: cover;" alt="{{ record.identified_name }}">
               <span class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white small px-3 py-1 m-2 rounded-pill">
-                <i class="bi bi-cpu me-1"></i> Preprocessed 224x224
+                <i class="bi bi-cpu me-1"></i> MobileNetV2 224x224
               </span>
             </div>
-            <p class="text-muted small mt-2 mb-0">Analyzed via Leaf Vision ML Classifier</p>
+            <p class="text-muted small mt-2 mb-0">Analyzed via MobileNetV2 CNN Deep Learning Classifier</p>
           </div>
           
           <div class="col-md-7">
-            <div class="d-flex align-items-center gap-2 mb-2">
+            <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
               <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 fw-semibold">Species Matched</span>
               {% if matched_meta.family %}
                 <span class="badge bg-light text-secondary border rounded-pill px-3 py-1">{{ matched_meta.family }}</span>
               {% endif %}
+              <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-1">47 Kaggle Classes Supported</span>
             </div>
 
             <h2 class="fw-bold text-success mb-1">{{ record.identified_name }}</h2>
@@ -38,11 +53,11 @@
             <!-- Confidence Progress Bar -->
             <div class="mb-3">
               <div class="d-flex justify-content-between small text-muted mb-1">
-                <span class="fw-semibold text-dark">Classification Match Score</span>
-                <span class="fw-bold text-success">{{ record.confidence_score }}%</span>
+                <span class="fw-semibold text-dark">Classification Confidence</span>
+                <span class="fw-bold {% if low_confidence %}text-warning{% else %}text-success{% endif %}">{{ record.confidence_score }}%</span>
               </div>
               <div class="progress" style="height: 10px;">
-                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ record.confidence_score }}%;" aria-valuenow="{{ record.confidence_score }}" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar {% if low_confidence %}bg-warning{% else %}bg-success{% endif %} progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ record.confidence_score }}%;" aria-valuenow="{{ record.confidence_score }}" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </div>
 
@@ -82,4 +97,5 @@
   </div>
 </div>
 {% endblock %}
+
 

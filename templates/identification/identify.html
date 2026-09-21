@@ -43,8 +43,26 @@
             <i class="bi bi-search me-2"></i> Analyze & Identify Plant
           </button>
         </form>
+
+        <div class="mt-4 pt-3 border-top text-start">
+          <div class="d-flex align-items-center justify-content-between cursor-pointer" data-bs-toggle="collapse" data-bs-target="#supportedClassesCollapse" aria-expanded="false" aria-controls="supportedClassesCollapse">
+            <span class="fw-bold text-success"><i class="bi bi-info-circle-fill me-1"></i> Supported Species Catalog (47 House Plant Classes)</span>
+            <span class="badge bg-success-subtle text-success rounded-pill border border-success-subtle">View All 47 Classes <i class="bi bi-chevron-down ms-1"></i></span>
+          </div>
+          <div class="collapse mt-3" id="supportedClassesCollapse">
+            <p class="text-muted small mb-2">Our MobileNetV2 Deep Learning classifier is fine-tuned specifically for the following 47 house plant species:</p>
+            <div class="d-flex flex-wrap gap-1">
+              {% for cls in supported_classes %}
+                <span class="badge bg-light text-dark border me-1 mb-1 p-2 fw-normal"><i class="bi bi-flower1 text-success me-1"></i>{{ cls }}</span>
+              {% empty %}
+                <span class="badge bg-light text-muted">African Violet, Aloe Vera, Anthurium, Areca Palm, Asparagus Fern, Begonia, Bird of Paradise, Birds Nest Fern, Boston Fern, Calathea, Cast Iron Plant, Chinese Money Plant, Chinese Evergreen, Christmas Cactus, Chrysanthemum, Ctenanthe, Daffodils, Dracaena, Dumb Cane, Elephant Ear, English Ivy, Hyacinth, Iron Cross Begonia, Jade Plant, Kalanchoe, Lilium, Lily of the Valley, Money Tree, Monstera Deliciosa, Orchid, Parlor Palm, Peace Lily, Poinsettia, Polka Dot Plant, Ponytail Palm, Pothos, Prayer Plant, Rattlesnake Plant, Rubber Plant, Sago Palm, Schefflera, Snake Plant, Tradescantia, Tulip, Venus Flytrap, Yucca, ZZ Plant</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
 
     {% if history %}
       <div class="card card-plantcare border-0 shadow-sm">

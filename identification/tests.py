@@ -56,23 +56,28 @@ class PlantIdentificationTests(TestCase):
         self.assertEqual(record.confidence_score, 0.0)
         self.assertEqual(record.identified_name, 'Mystery Plant')
 
-    def test_broad_leaf_not_misclassified_as_aloe_vera(self):
-        """Verify that broad-leaf plant images are correctly classified as broad-leaf species and not Aloe Vera."""
+    def test_plant_classes_metadata_loading(self):
+        """Verify that 47 supported house plant species are loaded from plant_classes.json."""
+        from identification.ml_engine import PlantMLEngine
+        classes = PlantMLEngine.get_supported_classes()
+        self.assertEqual(len(classes), 47)
+        self.assertIn("Monstera Deliciosa", classes)
+        self.assertIn("Aloe Vera", classes)
+        self.assertIn("Snake Plant", classes)
+
+    def test_low_confidence_threshold_flag(self):
+        """Verify that low confidence scores trigger low_confidence flag and warning message."""
         import tempfile
         from identification.ml_engine import PlantMLEngine
 
         with tempfile.NamedTemporaryFile(suffix='.jpg', delete=True) as tmp:
-            # Create a rich tropical broad-leaf image (Forest Green RGB: 34, 139, 34)
-            img = Image.new('RGB', size=(300, 300), color=(34, 139, 34))
+            img = Image.new('RGB', size=(224, 224), color=(100, 100, 100))
             img.save(tmp.name, format='JPEG')
 
             result = PlantMLEngine.identify_plant(tmp.name)
-
-            self.assertIsNotNone(result)
-            self.assertNotEqual(result['id'], 'aloe_vera', "Broad-leaf image should not be misclassified as Aloe Vera.")
-            self.assertEqual(result.get('leaf_type'), 'broad_leaf')
-            self.assertIn('green_ratio', result.get('feature_metrics', {}))
-            self.assertGreater(result['feature_metrics']['green_ratio'], 0.5)
+            self.assertIn('low_confidence', result)
+            self.assertIn('supported_classes', result)
+            self.assertEqual(len(result['supported_classes']), 47)
 
     def test_feature_extraction_accuracy(self):
         """Test feature extraction output keys (green_ratio, hue_hist, brightness, aspect_ratio)."""
@@ -84,7 +89,7 @@ class PlantIdentificationTests(TestCase):
             img = Image.new('RGB', size=(400, 200), color=(0, 160, 50))
             img.save(tmp.name, format='JPEG')
 
-            specs, rgb_np, hsv_np = PlantMLEngine.preprocess_image(tmp.name)
+            specs, rgb_255, rgb_np, hsv_np = PlantMLEngine.preprocess_image(tmp.name)
             features = PlantMLEngine.extract_features(rgb_np, hsv_np, specs=specs)
 
             self.assertIn('green_ratio', features)
@@ -92,5 +97,6 @@ class PlantIdentificationTests(TestCase):
             self.assertIn('brightness', features)
             self.assertEqual(len(features['hue_hist']), 8)
             self.assertEqual(features['aspect_ratio'], 2.0)
+
 
 

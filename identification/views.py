@@ -40,7 +40,11 @@ def identify_plant_view(request):
             record.care_summary = result.get('care_summary', '')
             record.save()
 
-            messages.success(request, f"Plant identified as '{record.identified_name}' with {record.confidence_score}% confidence!")
+            if result.get('low_confidence'):
+                messages.warning(request, f"Plant identified as '{record.identified_name}' with low confidence ({record.confidence_score}%). Please check warning details.")
+            else:
+                messages.success(request, f"Plant identified as '{record.identified_name}' with {record.confidence_score}% confidence!")
+
             return redirect('identification_result', record_id=record.id)
         else:
             messages.error(request, "Please select a valid plant or leaf image file to upload.")
@@ -48,10 +52,12 @@ def identify_plant_view(request):
         form = PlantUploadForm()
 
     history = PlantIdentificationHistory.objects.filter(user=request.user)[:5] if request.user.is_authenticated else []
+    supported_classes = PlantMLEngine.get_supported_classes()
 
     context = {
         'form': form,
         'history': history,
+        'supported_classes': supported_classes,
         'title': 'Identify Plant - PlantCare'
     }
     return render(request, 'identification/identify.html', context)
@@ -60,30 +66,41 @@ def identify_plant_view(request):
 def identification_result_view(request, record_id):
     record = get_object_or_404(PlantIdentificationHistory, id=record_id)
     
-    # Match record with ML Engine metadata dictionary if available
-    matched_meta = {}
-    for plant in PlantMLEngine.KNOWN_PLANTS:
-        if plant['name'] == record.identified_name or plant['scientific_name'] == record.scientific_name:
-            matched_meta = plant
-            break
+    metadata = PlantMLEngine.load_metadata()
+    species_info = metadata.get("species_info", {})
+    matched_meta = species_info.get(record.identified_name, {})
+    supported_classes = metadata.get("classes", [])
+
+    # Low confidence thresholding (55%)
+    low_confidence = record.confidence_score < 55.0
+    warning_message = ""
+    if low_confidence:
+        warning_message = (
+            f"Low confidence prediction ({record.confidence_score}%). The uploaded photo may be blurry, poorly lit, "
+            f"or contain a plant species outside our 47 supported house plant classes."
+        )
 
     # Determine confidence badge styling
-    if record.confidence_score >= 90:
+    if record.confidence_score >= 85:
         badge_style = 'bg-success'
         confidence_level = 'High Confidence Match'
-    elif record.confidence_score >= 75:
+    elif record.confidence_score >= 55:
         badge_style = 'bg-warning text-dark'
         confidence_level = 'Moderate Confidence Match'
     else:
-        badge_style = 'bg-info text-dark'
-        confidence_level = 'Possible Match'
+        badge_style = 'bg-danger text-white'
+        confidence_level = 'Uncertain / Low Confidence'
 
     context = {
         'record': record,
         'matched_meta': matched_meta,
         'badge_style': badge_style,
         'confidence_level': confidence_level,
+        'low_confidence': low_confidence,
+        'warning_message': warning_message,
+        'supported_classes': supported_classes,
         'title': f'Result: {record.identified_name} - PlantCare'
     }
     return render(request, 'identification/result.html', context)
+
 
