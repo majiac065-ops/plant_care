@@ -1,39 +1,222 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}User Registration - PlantCare{% endblock %}
+{% block title %}Create Account - PlantCare Smart Plant System{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-4">
-  <div class="col-md-8 col-lg-6">
-    <div class="card card-plantcare shadow-sm">
-      <div class="card-header card-header-green text-center">
-        <h4 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i> Join PlantCare System</h4>
+<div class="register-hero-container">
+  <div class="glass-register-card p-4 p-sm-5">
+    
+    <!-- Botanical Brand Header -->
+    <div class="text-center mb-4">
+      <div class="glass-badge-icon mb-3">
+        <i class="bi bi-flower3"></i>
       </div>
-      <div class="card-body p-4">
-        <form method="POST">
-          {% csrf_token %}
-          {% for field in form %}
-            <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label font-weight-bold">{{ field.label }}</label>
-              {{ field }}
-              {% if field.help_text %}
-                <small class="form-text text-muted d-block">{{ field.help_text }}</small>
-              {% endif %}
-              {% for error in field.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
-              {% endfor %}
-            </div>
-          {% endfor %}
-          <button type="submit" class="btn btn-green w-100 btn-lg mb-3">
-            <i class="bi bi-check-circle me-1"></i> Complete Registration
-          </button>
-        </form>
-        <hr>
-        <p class="text-center mb-0 text-muted">
-          Already registered? <a href="{% url 'login' %}" class="text-success fw-bold">Log In</a>
-        </p>
-      </div>
+      <h3 class="fw-bold font-heading mb-1" style="color: #1b4332;">Join PlantCare</h3>
+      <p class="text-muted small mb-0">Create your account to start your smart plant sanctuary</p>
     </div>
+
+    <!-- Django Messages (if any) -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show border-0 rounded-4 shadow-sm py-2 px-3 mb-3 small d-flex align-items-center gap-2" role="alert">
+          {% if message.tags == 'success' %}
+            <i class="bi bi-check-circle-fill text-success fs-6"></i>
+          {% else %}
+            <i class="bi bi-exclamation-circle-fill text-danger fs-6"></i>
+          {% endif %}
+          <div class="flex-grow-1">{{ message }}</div>
+          <button type="button" class="btn-close py-2" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <!-- Registration Form Errors Summary (if form.errors) -->
+    {% if form.errors %}
+      <div class="alert alert-danger border-0 rounded-4 shadow-sm py-2 px-3 mb-3 small" role="alert">
+        <div class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i> Please fix the following errors:</div>
+        <ul class="mb-0 ps-3">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <!-- Registration Form (Optimized for 16:9 Widescreen Landscape Desktop) -->
+    <form method="POST" action="" class="needs-validation" novalidate>
+      {% csrf_token %}
+
+      <div class="row g-3">
+        
+        <!-- Username Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_username" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-person-fill me-1 text-success"></i> Username <span class="text-danger">*</span>
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input 
+              type="text" 
+              name="username" 
+              id="id_username" 
+              class="form-control" 
+              placeholder="Choose a username" 
+              value="{{ form.username.value|default:'' }}"
+              autocomplete="username" 
+              required 
+              autofocus
+            >
+          </div>
+        </div>
+
+        <!-- Email Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_email" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-envelope-fill me-1 text-success"></i> Email Address <span class="text-danger">*</span>
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <input 
+              type="email" 
+              name="email" 
+              id="id_email" 
+              class="form-control" 
+              placeholder="name@example.com" 
+              value="{{ form.email.value|default:'' }}"
+              autocomplete="email" 
+              required
+            >
+          </div>
+        </div>
+
+        <!-- First Name Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_first_name" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-card-text me-1 text-success"></i> First Name
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+            <input 
+              type="text" 
+              name="first_name" 
+              id="id_first_name" 
+              class="form-control" 
+              placeholder="First name" 
+              value="{{ form.first_name.value|default:'' }}"
+              autocomplete="given-name"
+            >
+          </div>
+        </div>
+
+        <!-- Last Name Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_last_name" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-card-text me-1 text-success"></i> Last Name
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+            <input 
+              type="text" 
+              name="last_name" 
+              id="id_last_name" 
+              class="form-control" 
+              placeholder="Last name" 
+              value="{{ form.last_name.value|default:'' }}"
+              autocomplete="family-name"
+            >
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_password1" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-shield-lock-fill me-1 text-success"></i> Password <span class="text-danger">*</span>
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input 
+              type="password" 
+              name="password1" 
+              id="id_password1" 
+              class="form-control" 
+              placeholder="Create password" 
+              autocomplete="new-password" 
+              required
+            >
+            <button class="btn btn-toggle-password" type="button" id="togglePassword1" aria-label="Toggle password visibility">
+              <i class="bi bi-eye" id="togglePasswordIcon1"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Confirm Password Input -->
+        <div class="col-md-6 text-start">
+          <label for="id_password2" class="form-label fw-semibold small mb-1" style="color: #1b4332;">
+            <i class="bi bi-shield-check me-1 text-success"></i> Confirm Password <span class="text-danger">*</span>
+          </label>
+          <div class="input-group glass-input-group">
+            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+            <input 
+              type="password" 
+              name="password2" 
+              id="id_password2" 
+              class="form-control" 
+              placeholder="Confirm password" 
+              autocomplete="new-password" 
+              required
+            >
+            <button class="btn btn-toggle-password" type="button" id="togglePassword2" aria-label="Toggle confirm password visibility">
+              <i class="bi bi-eye" id="togglePasswordIcon2"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-4">
+        <button type="submit" class="btn btn-botanical-submit w-100 d-flex align-items-center justify-content-center gap-2 py-3">
+          <i class="bi bi-person-plus-fill fs-5"></i> Create Account
+        </button>
+      </div>
+
+      <!-- Login Redirect Link -->
+      <div class="text-center small text-muted mt-4 pt-2 border-top border-secondary border-opacity-10">
+        Already have an account? 
+        <a href="{% url 'login' %}" class="link-botanical fw-bold ms-1">Sign In</a>
+      </div>
+    </form>
+
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function setupPasswordToggle(buttonId, inputId, iconId) {
+      const toggleBtn = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+
+      if (toggleBtn && input && icon) {
+        toggleBtn.addEventListener('click', function() {
+          const isPassword = input.getAttribute('type') === 'password';
+          input.setAttribute('type', isPassword ? 'text' : 'password');
+          icon.classList.toggle('bi-eye', !isPassword);
+          icon.classList.toggle('bi-eye-slash', isPassword);
+        });
+      }
+    }
+
+    setupPasswordToggle('togglePassword1', 'id_password1', 'togglePasswordIcon1');
+    setupPasswordToggle('togglePassword2', 'id_password2', 'togglePasswordIcon2');
+  });
+</script>
 {% endblock %}

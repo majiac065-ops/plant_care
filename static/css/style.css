@@ -1,181 +1,479 @@
-/* PlantCare Green-Themed UI Stylesheet */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* ==========================================================================
+   PlantCare Clean Botanical Green Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary-dark: #1b4332;
-  --primary-green: #2d6a4f;
-  --accent-green: #40916c;
-  --light-green: #52b788;
-  --soft-mint: #d8f3dc;
-  --bg-sage: #f4f9f4;
-  --text-main: #2b2d42;
-  --text-muted: #6c757d;
-  --card-border: rgba(82, 183, 136, 0.25);
-  --shadow-sm: 0 4px 12px rgba(45, 106, 79, 0.08);
-  --shadow-hover: 0 10px 25px rgba(45, 106, 79, 0.16);
+  /* Color Palette - Clean Botanical Green */
+  --bg-main: #f4f7f5;
+  --primary-forest: #1b4332;
+  --secondary-sage: #2d6a4f;
+  --accent-mint: #52b788;
+  --accent-soft-mint: #e8f5e9;
+  --mint-light-bg: #f0f7f4;
+
+  /* Typography Colors */
+  --text-dark: #1f2937;
+  --text-charcoal: #4b5563;
+  --text-muted: #6b7280;
+
+  /* Card Properties */
+  --card-bg: #ffffff;
+  --card-border: rgba(27, 67, 50, 0.08);
+  --card-shadow: 0 4px 18px rgba(27, 67, 50, 0.05);
+  --card-shadow-hover: 0 10px 25px rgba(27, 67, 50, 0.1);
+
+  /* Fonts */
+  --font-heading: 'Outfit', -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
 }
 
+/* Global Reset & Body Styling */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-sage);
-  color: var(--text-main);
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: #f4f7f5 !important;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  color: #1b4332;
 }
 
 main {
   flex: 1;
 }
 
-/* Navbar */
+/* ==========================================================================
+   Navbar Styling (Clean Forest Green Navbar)
+   ========================================================================== */
 .navbar-plantcare {
-  background-color: var(--primary-dark);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-  padding: 0.8rem 1rem;
+  background: #1b4332 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 0;
 }
 
-.navbar-plantcare .navbar-brand {
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: #ffffff;
-  display: flex;
+.navbar-brand-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #52b788;
+  font-size: 1.2rem;
 }
 
-.navbar-plantcare .navbar-brand i {
-  color: var(--light-green);
+.navbar-brand-text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
 }
 
 .navbar-plantcare .nav-link {
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.5rem 0.9rem !important;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .navbar-plantcare .nav-link:hover,
 .navbar-plantcare .nav-link.active {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-/* Glassmorphism & Custom Cards */
-.card-plantcare {
-  background: #ffffff;
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+/* Clean Profile Navigation Pill */
+.nav-user-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: 30px;
+  padding: 0.45rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.nav-user-pill:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff !important;
+}
+
+.nav-logout-btn {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nav-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ff8a8a !important;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ==========================================================================
+   Banner & Card Styling
+   ========================================================================== */
+.emerald-banner {
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%) !important;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.15);
+}
+
+.card-plantcare,
+.glass-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(27, 67, 50, 0.08) !important;
+  border-radius: 20px;
+  box-shadow: 0 4px 18px rgba(27, 67, 50, 0.05) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
 }
 
-.card-plantcare:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
+.card-plantcare:hover,
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(27, 67, 50, 0.1) !important;
+  border-color: rgba(45, 106, 79, 0.2) !important;
 }
 
-.card-header-green {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary-green));
+.card-header-green,
+.card-header-tech {
+  background: #1b4332 !important;
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
   border-bottom: none;
   padding: 1.1rem 1.5rem;
 }
 
-/* Hero Section */
-.hero-banner {
-  background: linear-gradient(135deg, rgba(27, 67, 50, 0.95), rgba(45, 106, 79, 0.88)),
-              url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
-  color: white;
-  padding: 5rem 1.5rem;
-  border-radius: 24px;
-  box-shadow: 0 12px 30px rgba(27, 67, 50, 0.2);
+.card-header-green h1, .card-header-green h2, .card-header-green h3, .card-header-green h4, .card-header-green h5, .card-header-green h6,
+.card-header-tech h1, .card-header-tech h2, .card-header-tech h3, .card-header-tech h4, .card-header-tech h5, .card-header-tech h6 {
+  color: #ffffff !important;
 }
 
-.hero-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-/* Buttons */
-.btn-green {
-  background-color: var(--primary-green);
-  color: #ffffff;
+/* ==========================================================================
+   Buttons & Inputs
+   ========================================================================== */
+.btn-green,
+.btn-blue {
+  background-color: #2d6a4f !important;
+  color: #ffffff !important;
   font-weight: 600;
   border: none;
-  padding: 0.65rem 1.4rem;
-  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.15);
   transition: all 0.2s ease;
 }
 
-.btn-green:hover {
-  background-color: var(--primary-dark);
-  color: #ffffff;
+.btn-green:hover,
+.btn-blue:hover {
+  background-color: #1b4332 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(27, 67, 50, 0.25);
+}
+
+.btn-outline-green,
+.btn-outline-blue {
+  border: 1.5px solid #2d6a4f !important;
+  color: #2d6a4f !important;
+  font-weight: 600;
+  padding: 0.55rem 1.3rem;
+  border-radius: 12px;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-green:hover,
+.btn-outline-blue:hover {
+  background-color: #2d6a4f !important;
+  color: #ffffff !important;
   transform: translateY(-1px);
 }
 
-.btn-outline-green {
-  border: 2px solid var(--primary-green);
-  color: var(--primary-green);
-  font-weight: 600;
-  padding: 0.6rem 1.3rem;
-  border-radius: 10px;
+.form-control, .form-select {
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 0.65rem 1rem;
+  background-color: #ffffff;
+  color: var(--text-dark);
+  font-size: 0.95rem;
   transition: all 0.2s ease;
 }
 
-.btn-outline-green:hover {
-  background-color: var(--primary-green);
-  color: #ffffff;
+.form-control:focus, .form-select:focus {
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
 }
 
-/* Badges & Tags */
+/* Badges */
 .badge-confidence {
-  background-color: var(--soft-mint);
-  color: var(--primary-dark);
+  background-color: #e8f5e9;
+  color: #1b4332;
   font-weight: 700;
-  font-size: 0.9rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 20px;
-  border: 1px solid var(--light-green);
+  border: 1px solid rgba(45, 106, 79, 0.2);
 }
 
-.badge-care-info {
-  background-color: rgba(45, 106, 79, 0.1);
-  color: var(--primary-green);
-  font-weight: 600;
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
-}
-
-/* Upload Dropzone Preview */
+/* Upload Dropzone */
 .upload-dropzone {
-  border: 2px dashed var(--accent-green);
-  border-radius: 16px;
-  padding: 3rem 1.5rem;
-  text-align: center;
-  background-color: rgba(216, 243, 220, 0.25);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  border: 2px dashed #52b788 !important;
+  border-radius: 18px !important;
+  background-color: #f0f7f4 !important;
+  transition: all 0.2s ease !important;
 }
 
 .upload-dropzone:hover {
-  background-color: rgba(216, 243, 220, 0.5);
-}
-
-.upload-icon {
-  font-size: 3.5rem;
-  color: var(--accent-green);
+  background-color: #e6f4ed !important;
+  border-color: #2d6a4f !important;
 }
 
 /* Footer */
 .footer-plantcare {
-  background-color: var(--primary-dark);
-  color: rgba(255, 255, 255, 0.8);
-  padding: 1.8rem 0;
-  margin-top: 3rem;
-  font-size: 0.9rem;
+  background-color: #1b4332 !important;
+  color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem 0;
+  margin-top: 4rem;
 }
+
+.footer-brand {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+
+/* ==========================================================================
+   Botanical Glassmorphism Login Page System
+   ========================================================================== */
+.login-hero-container {
+  position: relative;
+  min-height: calc(100vh - 180px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+  border-radius: 28px;
+  overflow: hidden;
+  background-image: linear-gradient(135deg, rgba(12, 28, 19, 0.72) 0%, rgba(20, 50, 34, 0.82) 100%),
+                    url('../images/botanical_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-shadow: 0 20px 40px rgba(15, 34, 22, 0.35);
+}
+
+/* Frosted Glass Login Card */
+.glass-login-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.28), 0 0 30px rgba(82, 183, 136, 0.12) !important;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.glass-login-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.32), 0 0 40px rgba(82, 183, 136, 0.2) !important;
+}
+
+/* Glass Badge Icon Header */
+.glass-badge-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+  color: #52b788;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 1.25rem;
+  box-shadow: 0 8px 20px rgba(27, 67, 50, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Form Controls and Inputs */
+.glass-input-group {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.glass-input-group .input-group-text {
+  background-color: rgba(232, 245, 233, 0.85) !important;
+  color: #1b4332 !important;
+  border: 1.5px solid rgba(27, 67, 50, 0.15) !important;
+  border-end-0: none !important;
+  padding-left: 1.1rem;
+  padding-right: 0.9rem;
+  font-size: 1.1rem;
+}
+
+.glass-input-group .form-control {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border: 1.5px solid rgba(27, 67, 50, 0.15) !important;
+  border-start-0: none !important;
+  color: #1b4332 !important;
+  font-weight: 500;
+  padding: 0.75rem 1rem 0.75rem 0.25rem;
+  font-size: 0.98rem;
+  border-radius: 0 14px 14px 0;
+}
+
+.glass-input-group .form-control:focus {
+  background-color: #ffffff !important;
+  border-color: #2d6a4f !important;
+  box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.18) !important;
+}
+
+.glass-input-group:focus-within .input-group-text {
+  border-color: #2d6a4f !important;
+  background-color: #e8f5e9 !important;
+  color: #2d6a4f !important;
+}
+
+/* Password Toggle Button */
+.btn-toggle-password {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border: 1.5px solid rgba(27, 67, 50, 0.15) !important;
+  border-start-0: none !important;
+  color: #6b7280;
+  padding: 0 1rem;
+  border-radius: 0 14px 14px 0 !important;
+  transition: color 0.2s ease;
+}
+
+.btn-toggle-password:hover {
+  color: #1b4332;
+}
+
+/* Nature Deep Green Submit Button */
+.btn-botanical-submit {
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  padding: 0.85rem 1.5rem;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.35) !important;
+  transition: all 0.25s ease !important;
+}
+
+.btn-botanical-submit:hover {
+  background: linear-gradient(135deg, #143326 0%, #1b4332 100%) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(27, 67, 50, 0.45) !important;
+}
+
+.btn-botanical-submit:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25) !important;
+}
+
+/* Form Links & Checkbox */
+.form-check-input-green:checked {
+  background-color: #2d6a4f !important;
+  border-color: #2d6a4f !important;
+}
+
+.form-check-input-green:focus {
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.2) !important;
+}
+
+.link-botanical {
+  color: #1b4332;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link-botanical:hover {
+  color: #52b788;
+  text-decoration: underline;
+}
+
+/* Widescreen Landscape Registration Container */
+.register-hero-container {
+  position: relative;
+  min-height: calc(100vh - 180px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+  border-radius: 28px;
+  overflow: hidden;
+  background-image: linear-gradient(135deg, rgba(12, 28, 19, 0.72) 0%, rgba(20, 50, 34, 0.82) 100%),
+                    url('../images/botanical_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-shadow: 0 20px 40px rgba(15, 34, 22, 0.35);
+}
+
+@media (min-width: 992px) and (min-aspect-ratio: 4/3) {
+  .register-hero-container {
+    padding: 3.5rem 2rem;
+  }
+}
+
+/* Widescreen Frosted Glass Register Card */
+.glass-register-card {
+  background: rgba(255, 255, 255, 0.84) !important;
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  border-radius: 26px !important;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.3), 0 0 35px rgba(82, 183, 136, 0.15) !important;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.glass-register-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 32px 65px rgba(0, 0, 0, 0.34), 0 0 45px rgba(82, 183, 136, 0.22) !important;
+}
+
+

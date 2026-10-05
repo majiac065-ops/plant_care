@@ -5,29 +5,31 @@
 {% block content %}
 <div class="row justify-content-center py-3">
   <div class="col-lg-8">
-    <div class="card card-plantcare mb-4 border-0 shadow-sm">
+    <div class="card-plantcare mb-4 border-0 shadow-sm">
       <div class="card-header card-header-green text-center py-3">
-        <h4 class="mb-0 fw-bold"><i class="bi bi-cpu-fill me-2"></i> ML Leaf & Plant Identification Engine</h4>
+        <h4 class="mb-0 fw-bold font-heading" style="color: #ffffff !important;"><i class="bi bi-cpu-fill me-2"></i> ML Leaf & Plant Identification Engine</h4>
       </div>
       <div class="card-body p-4 text-center">
-        <p class="text-muted mb-4">
-          Upload a clear photo of any plant leaf or foliage. Our computer vision model extracts visual feature vectors (HSV saturation, edge venation, foliage density) to classify species and generate custom care guides.
+        <p class="text-secondary mb-4">
+          Upload a clear photo of any plant leaf or foliage. Our computer vision model extracts visual feature vectors to classify species and generate custom care guides.
         </p>
 
         <form method="POST" enctype="multipart/form-data" id="plantUploadForm">
           {% csrf_token %}
           <div class="upload-dropzone mb-4 p-4 border border-2 border-dashed rounded-4 bg-light cursor-pointer" id="dropzone">
             <div id="uploadPlaceholder">
-              <i class="bi bi-cloud-arrow-up-fill text-success display-4"></i>
-              <h5 class="mt-3 fw-bold text-success">Click or Drag Plant Photo Here</h5>
-              <p class="text-muted small mb-2">Supports JPG, PNG, WEBP high-resolution photos</p>
-              <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-4 mt-2" id="browseBtn">
+              <div class="d-inline-flex align-items-center justify-content-center rounded-circle p-3 mb-3" style="width: 72px; height: 72px; font-size: 2.2rem; background-color: #e8f5e9; color: #1b4332;">
+                <i class="bi bi-cloud-arrow-up-fill"></i>
+              </div>
+              <h5 class="fw-bold font-heading" style="color: #1b4332;">Click or Drag Plant Photo Here</h5>
+              <p class="text-muted small mb-3">Supports JPG, PNG, WEBP high-resolution photos</p>
+              <button type="button" class="btn btn-sm btn-outline-green rounded-pill px-4" id="browseBtn">
                 <i class="bi bi-folder2-open me-1"></i> Choose File
               </button>
             </div>
             
             <div id="imagePreviewContainer" class="d-none mt-2">
-              <img id="imagePreview" src="#" alt="Leaf Preview" class="img-thumbnail shadow-sm rounded-3 mb-2" style="max-height: 220px; object-fit: cover;">
+              <img id="imagePreview" src="#" alt="Leaf Preview" class="img-thumbnail shadow-sm rounded-4 mb-2" style="max-height: 220px; object-fit: cover;">
               <p class="text-success small fw-semibold mb-2" id="selectedFileName"></p>
               <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="changeFileBtn">
                 <i class="bi bi-arrow-repeat me-1"></i> Change Photo
@@ -46,16 +48,16 @@
 
         <div class="mt-4 pt-3 border-top text-start">
           <div class="d-flex align-items-center justify-content-between cursor-pointer" data-bs-toggle="collapse" data-bs-target="#supportedClassesCollapse" aria-expanded="false" aria-controls="supportedClassesCollapse">
-            <span class="fw-bold text-success"><i class="bi bi-info-circle-fill me-1"></i> Supported Species Catalog (47 House Plant Classes)</span>
+            <span class="fw-bold" style="color: #1b4332;"><i class="bi bi-info-circle-fill me-1 text-success"></i> Supported Species Catalog (47 House Plant Classes)</span>
             <span class="badge bg-success-subtle text-success rounded-pill border border-success-subtle">View All 47 Classes <i class="bi bi-chevron-down ms-1"></i></span>
           </div>
           <div class="collapse mt-3" id="supportedClassesCollapse">
-            <p class="text-muted small mb-2">Our MobileNetV2 Deep Learning classifier is fine-tuned specifically for the following 47 house plant species:</p>
+            <p class="text-secondary small mb-2">Our Deep Learning classifier is fine-tuned specifically for the following 47 house plant species:</p>
             <div class="d-flex flex-wrap gap-1">
               {% for cls in supported_classes %}
-                <span class="badge bg-light text-dark border me-1 mb-1 p-2 fw-normal"><i class="bi bi-flower1 text-success me-1"></i>{{ cls }}</span>
+                <span class="badge bg-white text-dark border me-1 mb-1 p-2 fw-normal rounded-3"><i class="bi bi-flower1 text-success me-1"></i>{{ cls }}</span>
               {% empty %}
-                <span class="badge bg-light text-muted">African Violet, Aloe Vera, Anthurium, Areca Palm, Asparagus Fern, Begonia, Bird of Paradise, Birds Nest Fern, Boston Fern, Calathea, Cast Iron Plant, Chinese Money Plant, Chinese Evergreen, Christmas Cactus, Chrysanthemum, Ctenanthe, Daffodils, Dracaena, Dumb Cane, Elephant Ear, English Ivy, Hyacinth, Iron Cross Begonia, Jade Plant, Kalanchoe, Lilium, Lily of the Valley, Money Tree, Monstera Deliciosa, Orchid, Parlor Palm, Peace Lily, Poinsettia, Polka Dot Plant, Ponytail Palm, Pothos, Prayer Plant, Rattlesnake Plant, Rubber Plant, Sago Palm, Schefflera, Snake Plant, Tradescantia, Tulip, Venus Flytrap, Yucca, ZZ Plant</span>
+                <span class="badge bg-white text-muted">African Violet, Aloe Vera, Anthurium, Areca Palm, Asparagus Fern, Begonia, Bird of Paradise, Birds Nest Fern, Boston Fern, Calathea, Cast Iron Plant, Chinese Money Plant, Chinese Evergreen, Christmas Cactus, Chrysanthemum, Ctenanthe, Daffodils, Dracaena, Dumb Cane, Elephant Ear, English Ivy, Hyacinth, Iron Cross Begonia, Jade Plant, Kalanchoe, Lilium, Lily of the Valley, Money Tree, Monstera Deliciosa, Orchid, Parlor Palm, Peace Lily, Poinsettia, Polka Dot Plant, Ponytail Palm, Pothos, Prayer Plant, Rattlesnake Plant, Rubber Plant, Sago Palm, Schefflera, Snake Plant, Tradescantia, Tulip, Venus Flytrap, Yucca, ZZ Plant</span>
               {% endfor %}
             </div>
           </div>
@@ -63,25 +65,24 @@
       </div>
     </div>
 
-
     {% if history %}
-      <div class="card card-plantcare border-0 shadow-sm">
+      <div class="card-plantcare border-0 shadow-sm">
         <div class="card-header bg-white text-dark fw-bold border-bottom py-3 d-flex align-items-center justify-content-between">
-          <span><i class="bi bi-clock-history me-2 text-success"></i> Recent Identification History</span>
+          <span class="font-heading"><i class="bi bi-clock-history me-2 text-success"></i> Recent Identification History</span>
           <span class="badge bg-secondary rounded-pill">{{ history|length }}</span>
         </div>
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush bg-transparent">
           {% for item in history %}
-            <li class="list-group-item d-flex align-items-center justify-content-between py-3">
+            <li class="list-group-item bg-transparent d-flex align-items-center justify-content-between py-3">
               <div class="d-flex align-items-center gap-3">
                 <img src="{{ item.uploaded_image.url }}" class="rounded-3 shadow-sm" style="width: 55px; height: 55px; object-fit: cover;" alt="Leaf Upload">
                 <div>
-                  <h6 class="mb-0 fw-bold text-success">{{ item.identified_name }}</h6>
+                  <h6 class="mb-0 fw-bold font-heading" style="color: #1b4332;">{{ item.identified_name }}</h6>
                   <small class="text-muted fst-italic">{{ item.scientific_name }} &bull; {{ item.identified_at|date:"M d, Y" }}</small>
                 </div>
               </div>
               <div>
-                <span class="badge badge-confidence me-2 bg-success text-white px-3 py-2 rounded-pill">{{ item.confidence_score }}% Match</span>
+                <span class="badge badge-confidence me-2 px-3 py-2 rounded-pill">{{ item.confidence_score }}% Match</span>
                 <a href="{% url 'identification_result' item.id %}" class="btn btn-sm btn-outline-green rounded-pill">View Details</a>
               </div>
             </li>
@@ -110,12 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (!fileInput || !dropzone) return;
 
-  // Prevent event recursion when clicking directly on the file input element
   fileInput.addEventListener('click', function(e) {
     e.stopPropagation();
   });
 
-  // Clicking anywhere inside the dropzone triggers the file input dialog
   dropzone.addEventListener('click', function(e) {
     if (e.target !== fileInput) {
       fileInput.click();
@@ -157,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
     handleFiles(e.target.files);
   });
 
-  // Drag and Drop handling
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropzone.addEventListener(eventName, function(e) {
       e.preventDefault();
@@ -168,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
   ['dragenter', 'dragover'].forEach(eventName => {
     dropzone.addEventListener(eventName, function() {
       dropzone.classList.add('border-success', 'shadow-sm');
-      dropzone.style.backgroundColor = 'rgba(216, 243, 220, 0.6)';
+      dropzone.style.backgroundColor = '#e8f5e9';
     }, false);
   });
 
@@ -202,5 +200,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-
-

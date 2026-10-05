@@ -4,31 +4,28 @@
 {% block title %}My Garden Dashboard - PlantCare{% endblock %}
 
 {% block content %}
-<!-- Top Header & Search Bar -->
-<div class="row align-items-center mb-4">
-  <div class="col-md-6 mb-3 mb-md-0">
-    <h2 class="fw-bold text-success mb-1"><i class="bi bi-flower3 me-2"></i> My Garden Dashboard</h2>
-    <p class="text-muted mb-0">Welcome back, <strong>{{ user.username }}</strong>! You have {{ total_plants }} plant{{ total_plants|pluralize }} saved.</p>
+<!-- Top Header & Action -->
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+  <div class="d-flex align-items-center gap-3">
+    <div class="text-white rounded-3 p-2 d-inline-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 1.5rem; background-color: #1b4332;">
+      <i class="bi bi-flower3"></i>
+    </div>
+    <div>
+      <h2 class="fw-bold mb-0 font-heading" style="color: #1b4332;">My Garden Dashboard</h2>
+      <p class="text-muted mb-0 small">Welcome back, <strong>{{ user.username }}</strong>! You have {{ total_plants }} plant{{ total_plants|pluralize }} in your collection.</p>
+    </div>
   </div>
-  <div class="col-md-6">
-    <form method="GET" action="{% url 'dashboard' %}" class="d-flex gap-2">
-      <input type="text" name="q" value="{{ query }}" class="form-control rounded-pill shadow-sm" placeholder="Search saved plants by name or notes...">
-      <button type="submit" class="btn btn-green rounded-pill px-3">
-        <i class="bi bi-search"></i>
-      </button>
-      <a href="{% url 'add_plant' %}" class="btn btn-outline-green rounded-pill text-nowrap">
-        <i class="bi bi-plus-lg me-1"></i> Add Plant
-      </a>
-    </form>
+  <div>
+    <a href="{% url 'add_plant' %}" class="btn btn-green rounded-pill px-4 shadow-sm">
+      <i class="bi bi-plus-lg me-1"></i> Add Plant
+    </a>
   </div>
 </div>
 
-<!-- Garden Header Banner Image -->
-<div class="mb-4 text-center">
-  <img src="{% static 'images/banner.jpeg' %}" 
-       alt="Garden Banner" 
-       class="img-fluid rounded shadow-sm w-100" 
-       style="max-height: 200px; object-fit: cover;">
+<!-- Personal Plant Sanctuary Banner -->
+<div class="mb-4 p-4 text-start rounded-4 shadow-sm emerald-banner" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);">
+  <h3 class="fw-bold mb-1 font-heading" style="color: #ffffff !important;">Personal Plant Sanctuary</h3>
+  <p class="mb-0 text-white-50 small">Manage, track, and care for your personal plant collection</p>
 </div>
 
 <!-- Saved Plants Grid -->
@@ -36,36 +33,45 @@
   <div class="row g-4 mb-5">
     {% for plant in plants %}
       <div class="col-md-6 col-lg-4">
-        <div class="card card-plantcare h-100">
-          {% if plant.plant_image %}
-            <img src="{{ plant.plant_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ plant.plant_name }}">
-          {% else %}
-            <div class="bg-light text-center py-5 border-bottom">
-              <i class="bi bi-tree text-success" style="font-size: 4rem;"></i>
-            </div>
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title fw-bold text-success mb-1">{{ plant.plant_name }}</h5>
-            <p class="card-subtitle text-muted fst-italic mb-3 small">{{ plant.scientific_name|default:"Botanical name unknown" }}</p>
-
-            <div class="small mb-3">
-              <div class="mb-1"><i class="bi bi-droplet-fill text-primary me-2"></i> <strong>Watering:</strong> {{ plant.watering_frequency|truncatechars:45|default:"Regular" }}</div>
-              <div class="mb-1"><i class="bi bi-sun-fill text-warning me-2"></i> <strong>Sunlight:</strong> {{ plant.sunlight_requirement|truncatechars:45|default:"Bright indirect" }}</div>
-            </div>
-
+        <div class="card-plantcare h-100 d-flex flex-column">
+          <div class="position-relative">
+            {% if plant.plant_image %}
+              <img src="{{ plant.plant_image.url }}" class="card-img-top" style="height: 210px; object-fit: cover;" alt="{{ plant.plant_name }}">
+            {% else %}
+              <div class="bg-light text-center py-5 border-bottom">
+                <i class="bi bi-tree text-success opacity-75" style="font-size: 4rem;"></i>
+              </div>
+            {% endif %}
             {% if plant.confidence_score %}
-              <span class="badge badge-confidence mb-3 d-inline-block"><i class="bi bi-cpu me-1"></i> {{ plant.confidence_score }}% ML Match</span>
+              <span class="badge badge-confidence position-absolute top-0 end-0 m-3 shadow-sm">
+                <i class="bi bi-cpu me-1"></i> {{ plant.confidence_score }}% Match
+              </span>
             {% endif %}
           </div>
-          <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center pt-0 pb-3 px-3">
-            <a href="{% url 'plant_detail' plant.id %}" class="btn btn-sm btn-outline-green rounded-pill">
+
+          <div class="card-body p-4 flex-grow-1">
+            <h5 class="fw-bold mb-1 font-heading" style="color: #1b4332;">{{ plant.plant_name }}</h5>
+            <p class="text-muted fst-italic mb-3 small">{{ plant.scientific_name|default:"Botanical species unknown" }}</p>
+
+            <div class="small bg-light p-3 rounded-3 mb-3 border">
+              <div class="mb-2 d-flex align-items-center text-secondary">
+                <i class="bi bi-droplet-fill me-2 fs-6" style="color: #2563eb;"></i> <span><strong>Watering:</strong> {{ plant.watering_frequency|truncatechars:40|default:"Regular" }}</span>
+              </div>
+              <div class="d-flex align-items-center text-secondary">
+                <i class="bi bi-sun-fill me-2 fs-6" style="color: #d97706;"></i> <span><strong>Sunlight:</strong> {{ plant.sunlight_requirement|truncatechars:40|default:"Bright indirect" }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pt-0 pb-4 px-4">
+            <a href="{% url 'plant_detail' plant.id %}" class="btn btn-sm btn-outline-green rounded-pill px-3">
               <i class="bi bi-eye-fill me-1"></i> View Details
             </a>
             <div class="btn-group">
-              <a href="{% url 'edit_plant' plant.id %}" class="btn btn-sm btn-outline-secondary" title="Edit">
+              <a href="{% url 'edit_plant' plant.id %}" class="btn btn-sm btn-light border text-secondary rounded-start-pill px-3" title="Edit">
                 <i class="bi bi-pencil-fill"></i>
               </a>
-              <a href="{% url 'delete_plant' plant.id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+              <a href="{% url 'delete_plant' plant.id %}" class="btn btn-sm btn-light border text-danger rounded-end-pill px-3" title="Delete">
                 <i class="bi bi-trash-fill"></i>
               </a>
             </div>
@@ -75,19 +81,15 @@
     {% endfor %}
   </div>
 {% else %}
-  <div class="card card-plantcare text-center p-5 mb-5">
-    <div class="mb-3 text-success fs-1">
+  <div class="card-plantcare text-center p-5 mb-5">
+    <div class="d-inline-flex align-items-center justify-content-center rounded-circle p-3 mb-3" style="width: 80px; height: 80px; font-size: 2.5rem; background-color: #e8f5e9; color: #1b4332;">
       <i class="bi bi-journal-plus"></i>
     </div>
-    <h4 class="fw-bold mb-2">No Saved Plants Found</h4>
+    <h4 class="fw-bold mb-2 font-heading" style="color: #1b4332;">No Saved Plants Found</h4>
     <p class="text-muted col-md-6 mx-auto mb-4">
-      {% if query %}
-        No plants matching "{{ query }}" were found in your collection.
-      {% else %}
-        Your garden dashboard is empty. Identify a plant or manually add plants to build your personal care catalog!
-      {% endif %}
+      Your garden dashboard is empty. Use our ML identification tool or manually add plants to build your personal care catalog!
     </p>
-    <div class="d-flex justify-content-center gap-3">
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
       <a href="{% url 'identify_plant' %}" class="btn btn-green rounded-pill px-4">
         <i class="bi bi-camera-fill me-1"></i> Identify Plant
       </a>

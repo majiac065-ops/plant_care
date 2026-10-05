@@ -5,13 +5,13 @@
 {% block content %}
 <div class="row justify-content-center py-3">
   <div class="col-lg-8">
-    <div class="card card-plantcare">
-      <div class="card-header card-header-green">
-        <h4 class="mb-0">
+    <div class="card-plantcare border-0 shadow-sm">
+      <div class="card-header card-header-green py-3">
+        <h4 class="mb-0 font-heading" style="color: #ffffff !important;">
           {% if plant %}
-            <i class="bi bi-pencil-square me-2"></i> Edit Plant: {{ plant.plant_name }}
+            <i class="bi bi-pencil-square me-2 text-success"></i> Edit Plant: {{ plant.plant_name }}
           {% else %}
-            <i class="bi bi-plus-circle-fill me-2"></i> Add New Plant to Garden
+            <i class="bi bi-plus-circle-fill me-2 text-success"></i> Add New Plant to Garden
           {% endif %}
         </h4>
       </div>
@@ -20,55 +20,55 @@
           {% csrf_token %}
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Plant Name *</label>
+              <label class="form-label fw-semibold text-dark small">Plant Name *</label>
               {{ form.plant_name }}
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Scientific Name</label>
+              <label class="form-label fw-semibold text-dark small">Scientific Name</label>
               {{ form.scientific_name }}
             </div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label font-weight-bold">Plant Image</label>
+            <label class="form-label fw-semibold text-dark small">Plant Image</label>
             {{ form.plant_image }}
             {% if plant.plant_image %}
               <div class="mt-2">
                 <small class="text-muted">Current image:</small><br>
-                <img src="{{ plant.plant_image.url }}" class="rounded shadow-sm mt-1" style="height: 90px; object-fit: cover;" alt="Current photo">
+                <img src="{{ plant.plant_image.url }}" class="rounded-3 shadow-sm mt-1" style="height: 90px; object-fit: cover;" alt="Current photo">
               </div>
             {% endif %}
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Watering Frequency</label>
+              <label class="form-label fw-semibold text-dark small">Watering Frequency</label>
               {{ form.watering_frequency }}
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Sunlight Requirement</label>
+              <label class="form-label fw-semibold text-dark small">Sunlight Requirement</label>
               {{ form.sunlight_requirement }}
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Soil Type</label>
+              <label class="form-label fw-semibold text-dark small">Soil Type</label>
               {{ form.soil_type }}
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label font-weight-bold">Fertilizer Info</label>
+              <label class="form-label fw-semibold text-dark small">Fertilizer Info</label>
               {{ form.fertilizer_info }}
             </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label font-weight-bold">Personal Notes & Reminders</label>
+            <label class="form-label fw-semibold text-dark small">Personal Notes & Reminders</label>
             {{ form.notes }}
           </div>
 
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-green px-4">
+            <button type="submit" class="btn btn-green px-4 shadow-sm">
               <i class="bi bi-save me-1"></i> Save Plant
             </button>
             <a href="{% if plant %}{% url 'plant_detail' plant.id %}{% else %}{% url 'dashboard' %}{% endif %}" class="btn btn-secondary px-4">
