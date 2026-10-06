@@ -4,6 +4,54 @@
 {% block title %}Sign In - PlantCare Smart Plant System{% endblock %}
 
 {% block content %}
+<style>
+  /* Botanical background wrapper */
+  .login-hero-container {
+    background: linear-gradient(rgba(15, 30, 22, 0.72), rgba(15, 30, 22, 0.72)), 
+                url("{% static 'images/botanical_bg.jpg' %}") no-repeat center center !important;
+    background-size: cover !important;
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    margin: 20px auto;
+    padding: 40px 20px;
+    max-width: 1200px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Center white card */
+  .glass-login-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px !important;
+    max-width: 450px !important;
+    width: 100% !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .btn-botanical-submit {
+    background-color: #1b4332 !important;
+    color: #ffffff !important;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: 600;
+  }
+
+  .btn-botanical-submit:hover {
+    background-color: #2d6a4f !important;
+    color: #ffffff !important;
+  }
+
+  .link-botanical {
+    color: #2d6a4f !important;
+    text-decoration: none;
+  }
+</style>
+
 <div class="login-hero-container">
   <div class="glass-login-card p-4 p-sm-5">
     
